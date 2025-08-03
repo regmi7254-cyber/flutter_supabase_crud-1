@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Welcome Note",
+    "content": "Welcome to the Flutter SQLite CRUD app! This is your first note.",
+    "created_at": "2024-01-15T10:00:00.000Z",
+    "updated_at": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "title": "Shopping List",
+    "content": "Milk, Bread, Eggs, Vegetables, Fruits, Meat",
+    "created_at": "2024-01-15T11:00:00.000Z",
+    "updated_at": "2024-01-15T11:00:00.000Z"
+  },
+  {
+    "title": "Meeting Notes",
+    "content": "Team meeting tomorrow at 2 PM. Agenda: Project updates, Q&A session, Next steps",
+    "created_at": "2024-01-15T12:00:00.000Z",
+    "updated_at": "2024-01-15T12:00:00.000Z"
+  },
+  {
+    "title": "Project Ideas",
+    "content": "1. Mobile app for fitness tracking\n2. Web dashboard for analytics\n3. E-commerce platform\n4. Social media app",
+    "created_at": "2024-01-15T13:00:00.000Z",
+    "updated_at": "2024-01-15T13:00:00.000Z"
+  },
+  {
+    "title": "Reminder",
+    "content": "Don't forget to backup your data regularly and test the import/export features!",
+    "created_at": "2024-01-15T14:00:00.000Z",
+    "updated_at": "2024-01-15T14:00:00.000Z"
+  }
+] 

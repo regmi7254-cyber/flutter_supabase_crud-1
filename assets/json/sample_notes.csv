@@ -1,0 +1,6 @@
+title,content,created_at,updated_at
+"CSV Note 1","This is the first note imported from CSV file","2024-01-15T15:00:00.000Z","2024-01-15T15:00:00.000Z"
+"CSV Note 2","This is the second note with some content","2024-01-15T16:00:00.000Z","2024-01-15T16:00:00.000Z"
+"Meeting Notes","Team meeting scheduled for Friday at 3 PM","2024-01-15T17:00:00.000Z","2024-01-15T17:00:00.000Z"
+"Todo List","1. Complete project documentation\n2. Review code\n3. Test features","2024-01-15T18:00:00.000Z","2024-01-15T18:00:00.000Z"
+"Reminder","Don't forget to backup data before updates","2024-01-15T19:00:00.000Z","2024-01-15T19:00:00.000Z" 
