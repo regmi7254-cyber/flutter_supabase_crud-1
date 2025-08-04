@@ -24,7 +24,6 @@ class SupabaseService {
   
   Future<Map<String, dynamic>> insertItem(Item item) async {
     try {
-      // Remove the id field for insert since it's auto-generated
       final insertData = {
         'name': item.name,
         'description': item.description,
@@ -48,7 +47,6 @@ class SupabaseService {
     }
   }
 
-  // READ - Get all items
   Future<List<Item>> getItems() async {
     try {
       final response = await client
@@ -62,7 +60,6 @@ class SupabaseService {
     }
   }
 
-  // READ - Get a single item by ID
   Future<Item?> getItem(int id) async {
     try {
       final response = await client
@@ -77,7 +74,6 @@ class SupabaseService {
     }
   }
 
-  // UPDATE - Update an item
   Future<Map<String, dynamic>> updateItem(Item item) async {
     try {
       final response = await client
@@ -92,7 +88,6 @@ class SupabaseService {
     }
   }
 
-  // DELETE - Delete an item
   Future<void> deleteItem(int id) async {
     try {
       await client
@@ -104,8 +99,6 @@ class SupabaseService {
     }
   }
 
-  // File Upload Operations
-  // Upload JSON file to Supabase Storage
   Future<String> uploadJsonToStorage(String jsonData, String fileName) async {
     try {
       final bytes = utf8.encode(jsonData);
@@ -119,7 +112,6 @@ class SupabaseService {
     }
   }
 
-  // Download JSON file from Supabase Storage
   Future<String> downloadJsonFromStorage(String fileName) async {
     try {
       final response = await client.storage
@@ -132,7 +124,6 @@ class SupabaseService {
     }
   }
 
-  // Upload SQLite data as JSON to server
   Future<void> uploadSQLiteDataToServer(List<Item> items) async {
     try {
       final jsonData = json.encode(items.map((item) => item.toMap()).toList());
@@ -144,7 +135,6 @@ class SupabaseService {
     }
   }
 
-  // Download SQLite data from server
   Future<List<Item>> downloadSQLiteDataFromServer(String fileName) async {
     try {
       final jsonString = await downloadJsonFromStorage(fileName);
@@ -156,7 +146,6 @@ class SupabaseService {
     }
   }
 
-  // Get list of available JSON files in storage
   Future<List<String>> getAvailableJsonFiles() async {
     try {
       final response = await client.storage
@@ -169,20 +158,15 @@ class SupabaseService {
     }
   }
 
-  // Sync local data with server
   Future<void> syncWithServer(List<Item> localItems) async {
     try {
-      // Upload local data to server
       await uploadSQLiteDataToServer(localItems);
       
-      // Optionally, you could also download server data and merge
-      // This is a simple one-way sync (local to server)
     } catch (e) {
       throw Exception('Failed to sync with server: $e');
     }
   }
 
-  // Get server statistics
   Future<Map<String, dynamic>> getServerStats() async {
     try {
       final items = await getItems();
@@ -200,7 +184,6 @@ class SupabaseService {
     }
   }
 
-  // Search items on server
   Future<List<Item>> searchItems(String query) async {
     try {
       final response = await client
@@ -215,7 +198,6 @@ class SupabaseService {
     }
   }
 
-  // Bulk insert items to server
   Future<void> bulkInsertItems(List<Item> items) async {
     try {
       final itemsData = items.map((item) => item.toMap()).toList();
@@ -225,7 +207,6 @@ class SupabaseService {
     }
   }
 
-  // Execute custom SQL query on server (if RLS allows)
   Future<List<Map<String, dynamic>>> executeSQLQuery(String query) async {
     try {
       final response = await client.rpc('execute_sql', params: {'query': query});
@@ -235,16 +216,13 @@ class SupabaseService {
     }
   }
 
-  // Check server connection
   Future<bool> checkConnection() async {
     try {
       print('🔍 Testing Supabase connection...');
       
-      // Test basic connection first
       final response = await client.from('items').select('id').limit(1);
-      print('✅ Connection test successful: $response');
+      print(' Connection test successful: $response');
       
-      // Test table structure
       try {
         final testItem = {
           'name': 'Test Item',
@@ -255,21 +233,20 @@ class SupabaseService {
         
         print('🧪 Testing insert capability...');
         final insertResponse = await client.from('items').insert(testItem).select().single();
-        print('✅ Insert test successful: $insertResponse');
+        print('Insert test successful: $insertResponse');
         
-        // Clean up test item
         await client.from('items').delete().eq('id', insertResponse['id']);
         print('🧹 Test item cleaned up');
         
       } catch (insertError) {
-        print('❌ Insert test failed: $insertError');
-        print('💡 This indicates RLS policies are blocking inserts');
+        print(' Insert test failed: $insertError');
+        print(' This indicates RLS policies are blocking inserts');
       }
       
       return true;
     } catch (e) {
-      print('❌ Connection test failed: $e');
-      print('💡 This might be because:');
+      print(' Connection test failed: $e');
+      print(' This might be because:');
       print('   1. The "items" table doesn\'t exist in your Supabase project');
       print('   2. RLS (Row Level Security) policies are blocking access');
       print('   3. Network connectivity issues');
