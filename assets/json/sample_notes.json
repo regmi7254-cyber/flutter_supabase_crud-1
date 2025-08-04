@@ -1,32 +1,37 @@
 [
   {
-    "title": "Welcome Note",
-    "content": "Welcome to the Flutter SQLite CRUD app! This is your first note.",
-    "created_at": "2024-01-15T10:00:00.000Z",
-    "updated_at": "2024-01-15T10:00:00.000Z"
+    "id": 1,
+    "title": "Sample Note 1",
+    "content": "This is a sample note for testing import functionality",
+    "created_at": "2024-01-15T10:30:00.000Z",
+    "updated_at": "2024-01-15T10:30:00.000Z"
   },
   {
-    "title": "Shopping List",
-    "content": "Milk, Bread, Eggs, Vegetables, Fruits, Meat",
+    "id": 2,
+    "title": "Sample Note 2",
+    "content": "Another sample note with different content",
     "created_at": "2024-01-15T11:00:00.000Z",
     "updated_at": "2024-01-15T11:00:00.000Z"
   },
   {
-    "title": "Meeting Notes",
-    "content": "Team meeting tomorrow at 2 PM. Agenda: Project updates, Q&A session, Next steps",
+    "id": 3,
+    "title": "Sample Note 3",
+    "content": "Third sample note for comprehensive testing",
+    "created_at": "2024-01-15T11:30:00.000Z",
+    "updated_at": "2024-01-15T11:30:00.000Z"
+  },
+  {
+    "id": 4,
+    "title": "Sample Note 4",
+    "content": "Fourth sample note with special characters: !@#$%^&*()",
     "created_at": "2024-01-15T12:00:00.000Z",
     "updated_at": "2024-01-15T12:00:00.000Z"
   },
   {
-    "title": "Project Ideas",
-    "content": "1. Mobile app for fitness tracking\n2. Web dashboard for analytics\n3. E-commerce platform\n4. Social media app",
-    "created_at": "2024-01-15T13:00:00.000Z",
-    "updated_at": "2024-01-15T13:00:00.000Z"
-  },
-  {
-    "title": "Reminder",
-    "content": "Don't forget to backup your data regularly and test the import/export features!",
-    "created_at": "2024-01-15T14:00:00.000Z",
-    "updated_at": "2024-01-15T14:00:00.000Z"
+    "id": 5,
+    "title": "Sample Note 5",
+    "content": "Fifth sample note with multiline content\nThis is a second line\nAnd a third line",
+    "created_at": "2024-01-15T12:30:00.000Z",
+    "updated_at": "2024-01-15T12:30:00.000Z"
   }
 ] 

@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop",
+    "description": "High-performance laptop for development work",
+    "created_at": "2024-01-15T10:30:00.000Z",
+    "updated_at": "2024-01-15T10:30:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Smartphone",
+    "description": "Latest smartphone with advanced features",
+    "created_at": "2024-01-16T14:20:00.000Z",
+    "updated_at": "2024-01-16T14:20:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Tablet",
+    "description": "Portable tablet for entertainment and productivity",
+    "created_at": "2024-01-17T09:15:00.000Z",
+    "updated_at": "2024-01-17T09:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Headphones",
+    "description": "Wireless noise-canceling headphones",
+    "created_at": "2024-01-18T16:45:00.000Z",
+    "updated_at": "2024-01-18T16:45:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Keyboard",
+    "description": "Mechanical keyboard for gaming and typing",
+    "created_at": "2024-01-19T11:30:00.000Z",
+    "updated_at": "2024-01-19T11:30:00.000Z"
+  }
+] 

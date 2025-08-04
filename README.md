@@ -1,178 +1,220 @@
-# Flutter SQLite CRUD App
+# Flutter Data Demo App
 
-A comprehensive Flutter application demonstrating SQLite database operations with JSON and CSV import/export functionality.
+A comprehensive Flutter application demonstrating local and server data management with SQLite, JSON, Excel, and Supabase integration.
 
 ## 🚀 Features
 
-### **SQLite Database Operations**
-- ✅ **CREATE**: Add new notes with title and content
-- ✅ **READ**: Display all notes with search functionality
-- ✅ **UPDATE**: Edit existing notes with inline editing
-- ✅ **DELETE**: Remove individual notes or all notes
-- ✅ **SEARCH**: Real-time search in title and content
-- ✅ **STATISTICS**: Database stats (total, oldest, newest)
+### Local Data Management (Tab 1)
+- **SQLite Database**: Full CRUD operations on local SQLite database
+- **JSON Import/Export**: Import data from JSON files and export to JSON
+- **Excel Import/Export**: Import data from Excel files and export to Excel
+- **SQL Queries**: Execute custom SQL queries on local database
+- **Search & Filter**: Search items by name or description
+- **Statistics**: View database statistics (total items, oldest/newest)
+- **Sample Data**: Automatic sample data loading for testing
 
-### **Import/Export Features**
-- ✅ **JSON Import**: Import notes from JSON files
-- ✅ **JSON Export**: Export all notes to JSON file
-- ✅ **CSV Import**: Import notes from CSV files (Excel format)
-- ✅ **CSV Export**: Export all notes to CSV file
-- ✅ **File Picker**: Native file selection dialog
+### Server Data Management (Tab 2)
+- **Supabase Integration**: Full server-side CRUD operations
+- **File Upload**: Upload JSON files to Supabase Storage
+- **Data Sync**: Upload local SQLite data to server
+- **File Download**: Download JSON files from server
+- **Server SQL Queries**: Execute SQL queries on server database
+- **Connection Status**: Real-time server connection monitoring
 
-### **Advanced Features**
-- ✅ **Error Handling**: Comprehensive error messages
-- ✅ **Loading States**: Progress indicators
-- ✅ **Confirmation Dialogs**: Safe delete operations
-- ✅ **Real-time Updates**: UI updates after operations
-- ✅ **Database Stats**: Live statistics display
+## 📋 Prerequisites
 
-## 📁 Project Structure
+- Flutter SDK (latest stable version)
+- Dart SDK
+- For Linux: `libsqlite3-dev` package
+- Supabase account (for server features)
 
-```
-lib/
-├── main.dart                 # App entry point
-├── models/
-│   └── note.dart            # Note data model
-├── screens/
-│   └── sqlite_screen.dart   # Main SQLite CRUD screen
-└── services/
-    └── database_service.dart # SQLite database service
+## 🛠️ Installation
 
-assets/
-└── json/
-    ├── sample_notes.json    # Sample JSON data
-    └── sample_notes.csv     # Sample CSV data
-```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd flutter_data_demo
+   ```
 
-## 🛠️ Setup Instructions
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
 
-### 1. Install Dependencies
-```bash
-flutter pub get
-```
+3. **Install system dependencies (Linux)**
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y libsqlite3-dev
+   ```
 
-### 2. Run the App
-```bash
-flutter run
-```
+4. **Configure Supabase (Optional)**
+   - Create a Supabase project at https://supabase.com
+   - Get your project URL and anon key
+   - Update `lib/services/supabase_service.dart`:
+     ```dart
+     url: 'YOUR_SUPABASE_URL',
+     anonKey: 'YOUR_SUPABASE_ANON_KEY',
+     ```
 
-## 📱 Usage
+5. **Run the app**
+   ```bash
+   flutter run
+   ```
 
-### **Main Screen Features**
+## 🗄️ Database Schema
 
-#### **Database Statistics**
-- View total number of notes
-- See oldest and newest note dates
-- Real-time updates after operations
-
-#### **Search Functionality**
-- Real-time search in title and content
-- Clear search with one click
-- Instant filtering of results
-
-#### **CRUD Operations**
-- **Add Note**: Fill title and content, click "Add Note"
-- **Edit Note**: Click edit icon, modify fields, click "Update Note"
-- **Delete Note**: Click delete icon to remove individual notes
-- **Delete All**: Use menu to delete all notes with confirmation
-
-#### **Import/Export Menu**
-Access via the menu button (⋮) in the app bar:
-- **Import JSON**: Select JSON file to import notes
-- **Export JSON**: Export all notes to JSON file
-- **Import CSV**: Select CSV file to import notes
-- **Export CSV**: Export all notes to CSV file
-- **Delete All**: Bulk delete with confirmation
-
-## 📊 Database Schema
+The app uses a simple `items` table with the following structure:
 
 ```sql
-CREATE TABLE notes(
+CREATE TABLE items(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
 ```
 
-## 📁 Sample Files
+## 📁 Project Structure
 
-The app includes sample files for testing import functionality:
+```
+lib/
+├── models/
+│   └── item.dart              # Data model for items
+├── services/
+│   ├── local_database_service.dart  # SQLite operations
+│   └── supabase_service.dart        # Supabase operations
+├── screens/
+│   ├── local_data_screen.dart       # Local data management UI
+│   └── server_data_screen.dart      # Server data management UI
+└── main.dart                         # App entry point
 
-### **JSON Format** (`assets/json/sample_notes.json`)
-```json
-[
-  {
-    "title": "Welcome Note",
-    "content": "Welcome to the Flutter SQLite CRUD app!",
-    "created_at": "2024-01-15T10:00:00.000Z",
-    "updated_at": "2024-01-15T10:00:00.000Z"
-  }
-]
+assets/
+├── json/
+│   └── sample_items.json      # Sample JSON data
+└── excel/                     # Excel files (if any)
 ```
 
-### **CSV Format** (`assets/json/sample_notes.csv`)
-```csv
-title,content,created_at,updated_at
-"Welcome Note","Welcome to the Flutter SQLite CRUD app!","2024-01-15T10:00:00.000Z","2024-01-15T10:00:00.000Z"
-```
+## 🎯 Usage Guide
 
-## 🔧 Dependencies
+### Local Data Management
 
-- `flutter`: Core Flutter framework
-- `sqflite`: SQLite database for Flutter
-- `path_provider`: File system access
-- `file_picker`: File selection for import/export
-- `http`: HTTP requests for file operations
+1. **Add Items**: Use the form to add new items with name and description
+2. **Edit Items**: Click the edit icon on any item to modify it
+3. **Delete Items**: Click the delete icon to remove items
+4. **Search**: Use the search bar to filter items
+5. **Import JSON**: Use the menu to import JSON files
+6. **Export JSON**: Export current data to JSON file
+7. **Import Excel**: Import data from Excel files
+8. **Export Excel**: Export data to Excel format
+9. **SQL Queries**: Execute custom SQL queries
+10. **Statistics**: View database statistics in the top bar
 
-## 🎯 Key Features
+### Server Data Management
 
-### **SQLite Database**
-- Local database with offline support
-- Automatic database creation
-- Transaction support for bulk operations
-- SQL queries for search and statistics
+1. **Configure Supabase**: Add your credentials to enable server features
+2. **Add Server Items**: Add items directly to the server database
+3. **Upload JSON**: Upload JSON files to Supabase Storage
+4. **Upload SQLite Data**: Export local data and upload to server
+5. **Download Files**: Download JSON files from server storage
+6. **Sync Data**: Synchronize local data with server
+7. **Server SQL Queries**: Execute queries on server database
+8. **Connection Status**: Monitor server connection status
 
-### **File Operations**
-- Import from JSON files
-- Export to JSON files
-- Import from CSV files (Excel format)
-- Export to CSV files
-- File picker integration
-- Automatic file naming with timestamps
+## 🔧 Configuration
 
-### **User Interface**
-- Modern Material Design
-- Responsive layout
-- Loading indicators
-- Error handling with user feedback
-- Confirmation dialogs for destructive actions
+### Supabase Setup
 
-## 📝 Testing
+1. Create a new Supabase project
+2. Create a table named `items` with the schema above
+3. Set up Row Level Security (RLS) policies:
+   ```sql
+   -- Enable RLS
+   ALTER TABLE items ENABLE ROW LEVEL SECURITY;
+   
+   -- Allow all operations for authenticated users
+   CREATE POLICY "Allow all operations" ON items
+   FOR ALL USING (true);
+   ```
 
-### **Manual Testing Steps**
-1. **Add Notes**: Create several notes with different titles and content
-2. **Search**: Use the search bar to find specific notes
-3. **Edit**: Modify existing notes using the edit functionality
-4. **Delete**: Remove individual notes
-5. **Import JSON**: Use the sample JSON file to test import
-6. **Import CSV**: Use the sample CSV file to test import
-7. **Export**: Export data to both JSON and CSV formats
-8. **Delete All**: Test the bulk delete functionality
+4. Create a storage bucket named `json-files`:
+   ```sql
+   -- Create storage bucket
+   INSERT INTO storage.buckets (id, name)
+   VALUES ('json-files', 'json-files');
+   
+   -- Allow public access to storage
+   CREATE POLICY "Public Access" ON storage.objects
+   FOR SELECT USING (bucket_id = 'json-files');
+   
+   CREATE POLICY "Public Upload" ON storage.objects
+   FOR INSERT WITH CHECK (bucket_id = 'json-files');
+   ```
 
-### **Sample Data**
-The app includes sample files in `assets/json/`:
-- `sample_notes.json` - 5 sample notes in JSON format
-- `sample_notes.csv` - 5 sample notes in CSV format
+### Local Database
 
-## 🚀 Getting Started
+The local SQLite database is automatically created in the app's documents directory. No additional setup required.
 
-1. **Clone the repository**
-2. **Install dependencies**: `flutter pub get`
-3. **Run the app**: `flutter run`
-4. **Test features**: Use the sample files to test import/export
+## 📊 Features Overview
+
+| Feature | Local | Server | Status |
+|---------|-------|--------|--------|
+| CRUD Operations | ✅ | ✅ | Complete |
+| JSON Import/Export | ✅ | ✅ | Complete |
+| Excel Import/Export | ✅ | ❌ | Local Only |
+| SQL Queries | ✅ | ✅ | Complete |
+| Search & Filter | ✅ | ✅ | Complete |
+| Statistics | ✅ | ✅ | Complete |
+| File Upload | ❌ | ✅ | Server Only |
+| Data Sync | ❌ | ✅ | Server Only |
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **SQLite not working on Linux**
+   ```bash
+   sudo apt-get install -y libsqlite3-dev
+   ```
+
+2. **Supabase connection failed**
+   - Check your URL and anon key
+   - Ensure RLS policies are configured
+   - Verify network connectivity
+
+3. **File import/export not working**
+   - Check file permissions
+   - Ensure file format is correct
+   - Verify file path is accessible
+
+4. **App crashes on startup**
+   - Run `flutter clean`
+   - Run `flutter pub get`
+   - Check console for error messages
+
+## 🚀 Demo Data
+
+The app includes sample data that's automatically loaded when the database is empty. You can also import the provided `assets/json/sample_items.json` file for testing.
 
 ## 📝 License
 
-This project is open source and available under the MIT License. 
+This project is for demonstration purposes. Feel free to use and modify as needed.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📞 Support
+
+For issues and questions:
+- Check the troubleshooting section
+- Review the console logs for error messages
+- Ensure all dependencies are properly installed
+
+---
+
+**Happy Coding! 🎉** 
