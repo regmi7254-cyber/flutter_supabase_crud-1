@@ -1,6 +1,0 @@
-title,content,created_at,updated_at
-"Sample CSV Note 1","This is a sample note imported from CSV file","2024-01-15T10:00:00.000Z","2024-01-15T10:00:00.000Z"
-"Sample CSV Note 2","Another sample note with CSV format","2024-01-15T10:30:00.000Z","2024-01-15T10:30:00.000Z"
-"Sample CSV Note 3","Third CSV note for testing import","2024-01-15T11:00:00.000Z","2024-01-15T11:00:00.000Z"
-"Sample CSV Note 4","Fourth CSV note with special characters: !@#$%^&*()","2024-01-15T11:30:00.000Z","2024-01-15T11:30:00.000Z"
-"Sample CSV Note 5","Fifth CSV note with multiline content","2024-01-15T12:00:00.000Z","2024-01-15T12:00:00.000Z" 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/item.dart';
 
@@ -31,18 +30,14 @@ class SupabaseService {
         'updated_at': item.updatedAt.toIso8601String(),
       };
       
-      print('🔄 Attempting to insert item: $insertData');
-      
       final response = await client
           .from('items')
           .insert(insertData)
           .select()
           .single();
       
-      print('✅ Item inserted successfully: $response');
       return response;
     } catch (e) {
-      print('❌ Failed to insert item: $e');
       throw Exception('Failed to insert item: $e');
     }
   }
@@ -103,7 +98,7 @@ class SupabaseService {
     try {
       final bytes = utf8.encode(jsonData);
       final response = await client.storage
-          .from('json-files')
+          .from('assets')
           .uploadBinary(fileName, bytes);
       
       return response;
@@ -115,7 +110,7 @@ class SupabaseService {
   Future<String> downloadJsonFromStorage(String fileName) async {
     try {
       final response = await client.storage
-          .from('json-files')
+          .from('assets')
           .download(fileName);
       
       return utf8.decode(response);
@@ -149,7 +144,7 @@ class SupabaseService {
   Future<List<String>> getAvailableJsonFiles() async {
     try {
       final response = await client.storage
-          .from('json-files')
+          .from('assets')
           .list();
       
       return response.map((file) => file.name).toList();
@@ -218,38 +213,10 @@ class SupabaseService {
 
   Future<bool> checkConnection() async {
     try {
-      print('🔍 Testing Supabase connection...');
-      
-      final response = await client.from('items').select('id').limit(1);
-      print(' Connection test successful: $response');
-      
-      try {
-        final testItem = {
-          'name': 'Test Item',
-          'description': 'Test Description',
-          'created_at': DateTime.now().toIso8601String(),
-          'updated_at': DateTime.now().toIso8601String(),
-        };
-        
-        print('🧪 Testing insert capability...');
-        final insertResponse = await client.from('items').insert(testItem).select().single();
-        print('Insert test successful: $insertResponse');
-        
-        await client.from('items').delete().eq('id', insertResponse['id']);
-        print('🧹 Test item cleaned up');
-        
-      } catch (insertError) {
-        print(' Insert test failed: $insertError');
-        print(' This indicates RLS policies are blocking inserts');
-      }
-      
+      await client.from('items').select('id').limit(1);
       return true;
     } catch (e) {
-      print(' Connection test failed: $e');
-      print(' This might be because:');
-      print('   1. The "items" table doesn\'t exist in your Supabase project');
-      print('   2. RLS (Row Level Security) policies are blocking access');
-      print('   3. Network connectivity issues');
+      print('❌ Connection test failed: $e');
       return false;
     }
   }

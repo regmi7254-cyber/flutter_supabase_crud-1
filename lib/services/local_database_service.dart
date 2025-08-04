@@ -20,15 +20,10 @@ class LocalDatabaseService {
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
       String path = join(documentsDirectory.path, 'items.db');
       
-      print('📁 Local Database path: $path');
-      
       return await openDatabase(
         path,
         version: 1,
         onCreate: _onCreate,
-        onOpen: (db) {
-          print('✅ Local Database opened successfully');
-        },
       );
     } catch (e) {
       print('❌ Local Database initialization error: $e');
@@ -47,7 +42,6 @@ class LocalDatabaseService {
           updated_at TEXT NOT NULL
         )
       ''');
-      print('✅ Local Database table created successfully');
     } catch (e) {
       print('❌ Local Database table creation error: $e');
       rethrow;

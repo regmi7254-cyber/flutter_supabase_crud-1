@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io';
 import 'services/local_database_service.dart';
 import 'services/supabase_service.dart';
 import 'screens/local_data_screen.dart';
 import 'screens/server_data_screen.dart';
+import 'screens/json_files_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,15 +19,12 @@ void main() async {
   
   try {
     await LocalDatabaseService.database;
-    print('✅ Local Database initialized successfully');
   } catch (e) {
     print('❌ Local Database initialization failed: $e');
   }
   
-  // Initialize Supabase
   try {
     await SupabaseService.initialize();
-    print('✅ Supabase initialized successfully');
   } catch (e) {
     print('❌ Supabase initialization failed: $e');
   }
@@ -60,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     LocalDataScreen(),
     ServerDataScreen(),
+    JsonFilesScreen(),
   ];
 
   @override
@@ -88,9 +86,14 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.cloud),
             label: 'Server Data',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.file_copy),
+            label: 'JSON Files',
+          ),
         ],
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

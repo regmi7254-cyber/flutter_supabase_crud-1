@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import '../models/item.dart';
 import '../services/supabase_service.dart';
 import '../services/local_database_service.dart';
@@ -22,7 +19,6 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
   List<Item> _serverItems = [];
   List<Item> _filteredServerItems = [];
   List<Map<String, dynamic>> _sqlQueryResults = [];
-  List<String> _availableFiles = [];
   bool _isLoading = false;
   int? _editingId;
   Map<String, dynamic>? _serverStats;
@@ -42,7 +38,6 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
       if (_isConnected) {
         await _loadServerItems();
         await _loadServerStats();
-        await _loadAvailableFiles();
       }
     } catch (e) {
       print('❌ Connection check failed: $e');
@@ -57,15 +52,12 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
     
     setState(() => _isLoading = true);
     try {
-      print('🔄 Loading server items...');
       final items = await _supabaseService.getItems();
-      print('📝 Loaded ${items.length} server items');
       setState(() {
         _serverItems = items;
         _filteredServerItems = items;
       });
     } catch (e) {
-      print('❌ Error loading server items: $e');
       _showSnackBar('Error loading server items: $e');
     } finally {
       setState(() => _isLoading = false);
@@ -76,27 +68,14 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
     if (!_isConnected) return;
     
     try {
-      print('📊 Loading server stats...');
       final stats = await _supabaseService.getServerStats();
-      print('📈 Server stats: $stats');
       setState(() => _serverStats = stats);
     } catch (e) {
       print('❌ Error loading server stats: $e');
     }
   }
 
-  Future<void> _loadAvailableFiles() async {
-    if (!_isConnected) return;
-    
-    try {
-      print('📁 Loading available files...');
-      final files = await _supabaseService.getAvailableJsonFiles();
-      print('📄 Available files: $files');
-      setState(() => _availableFiles = files);
-    } catch (e) {
-      print('❌ Error loading available files: $e');
-    }
-  }
+
 
   Future<void> _addServerItem() async {
     if (_nameController.text.isEmpty || _descriptionController.text.isEmpty) {
@@ -192,67 +171,13 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
     }
   }
 
-  // Upload Operations
-  Future<void> _uploadJsonToServer() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-      );
 
-      if (result != null) {
-        final file = File(result.files.single.path!);
-        final jsonString = await file.readAsString();
-        final fileName = 'uploaded_${DateTime.now().millisecondsSinceEpoch}.json';
-        
-        await _supabaseService.uploadJsonToStorage(jsonString, fileName);
-        await _loadAvailableFiles();
-        _showSnackBar('JSON uploaded to server successfully');
-      }
-    } catch (e) {
-      _showSnackBar('Error uploading JSON to server: $e');
-    }
-  }
-
-  Future<void> _uploadSQLiteDataToServer() async {
-    try {
-      final localItems = await _localDatabaseService.getItems();
-      await _supabaseService.uploadSQLiteDataToServer(localItems);
-      await _loadAvailableFiles();
-      _showSnackBar('SQLite data uploaded to server successfully');
-    } catch (e) {
-      _showSnackBar('Error uploading SQLite data to server: $e');
-    }
-  }
-
-  // Download Operations
-  Future<void> _downloadJsonFromServer(String fileName) async {
-    try {
-      final jsonString = await _supabaseService.downloadJsonFromStorage(fileName);
-      final localFileName = 'downloaded_${DateTime.now().millisecondsSinceEpoch}.json';
-      final filePath = await _localDatabaseService.saveToFile(jsonString, localFileName);
-      _showSnackBar('JSON downloaded to: $filePath');
-    } catch (e) {
-      _showSnackBar('Error downloading JSON from server: $e');
-    }
-  }
-
-  Future<void> _downloadSQLiteDataFromServer(String fileName) async {
-    try {
-      final items = await _supabaseService.downloadSQLiteDataFromServer(fileName);
-      await _localDatabaseService.bulkInsertItems(items);
-      _showSnackBar('SQLite data downloaded and imported successfully');
-    } catch (e) {
-      _showSnackBar('Error downloading SQLite data from server: $e');
-    }
-  }
 
   // Sync Operations
   Future<void> _syncWithServer() async {
     try {
       final localItems = await _localDatabaseService.getItems();
       await _supabaseService.syncWithServer(localItems);
-      await _loadAvailableFiles();
       _showSnackBar('Data synced with server successfully');
     } catch (e) {
       _showSnackBar('Error syncing with server: $e');
@@ -318,12 +243,6 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
           PopupMenuButton<String>(
             onSelected: (value) {
               switch (value) {
-                case 'upload_json':
-                  _uploadJsonToServer();
-                  break;
-                case 'upload_sqlite':
-                  _uploadSQLiteDataToServer();
-                  break;
                 case 'sync':
                   _syncWithServer();
                   break;
@@ -333,26 +252,6 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'upload_json',
-                child: Row(
-                  children: [
-                    Icon(Icons.file_upload),
-                    SizedBox(width: 8),
-                    Text('Upload JSON'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'upload_sqlite',
-                child: Row(
-                  children: [
-                    Icon(Icons.storage),
-                    SizedBox(width: 8),
-                    Text('Upload SQLite Data'),
-                  ],
-                ),
-              ),
               PopupMenuItem(
                 value: 'sync',
                 child: Row(
@@ -566,53 +465,7 @@ class _ServerDataScreenState extends State<ServerDataScreen> {
                     ),
                   ),
 
-                // Available Files Section
-                if (_availableFiles.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Available Files on Server',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Container(
-                          height: 100,
-                          child: ListView.builder(
-                            itemCount: _availableFiles.length,
-                            itemBuilder: (context, index) {
-                              final fileName = _availableFiles[index];
-                              return Card(
-                                child: ListTile(
-                                  title: Text(fileName),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.download),
-                                        onPressed: () => _downloadJsonFromServer(fileName),
-                                        tooltip: 'Download JSON',
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.storage),
-                                        onPressed: () => _downloadSQLiteDataFromServer(fileName),
-                                        tooltip: 'Download as SQLite Data',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
 
                 // Server Items List
                 Expanded(

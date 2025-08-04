@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import '../models/item.dart';
 import '../services/local_database_service.dart';
 
@@ -72,7 +70,6 @@ class _LocalDataScreenState extends State<LocalDataScreen> {
       await _loadDatabaseStats();
       _showSnackBar('Sample data added successfully');
     } catch (e) {
-      print('Error adding sample data: $e');
       _showSnackBar('Error adding sample data: $e');
     }
   }
@@ -80,15 +77,12 @@ class _LocalDataScreenState extends State<LocalDataScreen> {
   Future<void> _loadItems() async {
     setState(() => _isLoading = true);
     try {
-      print('🔄 Loading items...');
       final items = await _databaseService.getItems();
-      print('📝 Loaded ${items.length} items');
       setState(() {
         _items = items;
         _filteredItems = items;
       });
     } catch (e) {
-      print('❌ Error loading items: $e');
       _showSnackBar('Error loading items: $e');
     } finally {
       setState(() => _isLoading = false);
@@ -97,9 +91,7 @@ class _LocalDataScreenState extends State<LocalDataScreen> {
 
   Future<void> _loadDatabaseStats() async {
     try {
-      print('📊 Loading database stats...');
       final stats = await _databaseService.getDatabaseStats();
-      print('📈 Database stats: $stats');
       setState(() => _databaseStats = stats);
     } catch (e) {
       print('❌ Error loading stats: $e');
